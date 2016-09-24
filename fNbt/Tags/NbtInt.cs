@@ -54,13 +54,13 @@ namespace fNbt {
                 readStream.ReadInt32();
                 return false;
             }
-            Value = readStream.ReadInt32();
+            Value = readStream.ReadNbtInt();
             return true;
         }
 
 
         internal override void SkipTag(NbtBinaryReader readStream) {
-            readStream.ReadInt32();
+            readStream.ReadNbtInt();
         }
 
 
@@ -68,12 +68,12 @@ namespace fNbt {
             writeStream.Write(NbtTagType.Int);
             if (Name == null) throw new NbtFormatException("Name is null");
             writeStream.Write(Name);
-            writeStream.Write(Value);
+            writeStream.WriteNbtInt(Value);
         }
 
 
         internal override void WriteData(NbtBinaryWriter writeStream) {
-            writeStream.Write(Value);
+            writeStream.WriteNbtInt(Value);
         }
 
 

@@ -17,7 +17,9 @@ namespace fNbt {
         // Each instance has to have its own encoder, because it does maintain state.
         readonly Encoder encoder = Encoding.GetEncoder();
 
-        public Stream BaseStream {
+		public bool UseVarInt { get; set; }
+
+		public Stream BaseStream {
             get {
                 stream.Flush();
                 return stream;
@@ -89,7 +91,36 @@ namespace fNbt {
         }
 
 
-        public void Write(long value) {
+	    public void WriteNbtInt(int value) {
+		    if (UseVarInt) {
+			    WriteVarInt(value);
+		    } else {
+			    Write(value);
+		    }
+	    }
+
+
+	    public void WriteVarInt(int value) {
+			// VarInt is LE by default
+		    if (swapNeeded) {
+				VarInt.WriteSInt32(BaseStream, value);
+			} else {
+				VarInt.WriteSInt32(BaseStream, SwapInt32(value));
+			}
+		}
+
+		public static short SwapInt16(short v)
+		{
+			return (short)(((v & 0xff) << 8) | ((v >> 8) & 0xff));
+		}
+
+		public static int SwapInt32(int v)
+		{
+			return (int)(((SwapInt16((short)v) & 0xffff) << 0x10) |
+						  (SwapInt16((short)(v >> 0x10)) & 0xffff));
+		}
+
+		public void Write(long value) {
             unchecked {
                 if (swapNeeded) {
                     buffer[0] = (byte)(value >> 56);
@@ -169,9 +200,14 @@ namespace fNbt {
 
             // Write out string length (as number of bytes)
             int numBytes = Encoding.GetByteCount(value);
-            Write((short)numBytes);
+	        if (UseVarInt) {
+				Write((byte)numBytes);
+			}
+			else {
+				Write((short)numBytes);
+			}
 
-            if (numBytes <= BufferSize) {
+			if (numBytes <= BufferSize) {
                 // If the string fits entirely in the buffer, encode and write it as one
                 Encoding.GetBytes(value, 0, value.Length, buffer, 0);
                 stream.Write(buffer, 0, numBytes);
@@ -207,5 +243,6 @@ namespace fNbt {
                 written += toWrite;
             }
         }
+
     }
 }
