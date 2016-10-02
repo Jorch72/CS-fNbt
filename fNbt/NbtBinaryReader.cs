@@ -62,19 +62,7 @@ namespace fNbt {
 
 		public int ReadVarInt()
 		{
-
-			var value = VarInt.ReadSInt32(BaseStream);
-
-
-			// VarInt is LE by default, so this needs to be reversed
-			if (!swapNeeded)
-			{
-				return Swap(value);
-			}
-			else
-			{
-				return value;
-			}
+			return VarInt.ReadSInt32(BaseStream);
 		}
 
 		public override long ReadInt64() {

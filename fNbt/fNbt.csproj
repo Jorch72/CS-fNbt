@@ -137,5 +137,7 @@
     <Compile Include="NbtTagType.cs" />
     <Compile Include="ZLibStream.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="fNbt.nuspec" />
+  </ItemGroup>
 </Project>

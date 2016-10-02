@@ -102,11 +102,7 @@ namespace fNbt {
 
 	    public void WriteVarInt(int value) {
 			// VarInt is LE by default
-		    if (swapNeeded) {
-				VarInt.WriteSInt32(BaseStream, value);
-			} else {
-				VarInt.WriteSInt32(BaseStream, SwapInt32(value));
-			}
+			VarInt.WriteSInt32(BaseStream, value);
 		}
 
 		public static short SwapInt16(short v)
