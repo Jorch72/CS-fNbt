@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>MiNET fnbt version with support for MCPE 0.16+ varint and string.</description>
     <releaseNotes>MiNET fnbt version with support for MCPE 0.16+ varint and string.</releaseNotes>
-    <copyright>2010-2011 Erik Davidson; 2012-2015 Matvei Stefarov</copyright>
+    <copyright>2010-2011 Erik Davidson; 2012-2015 Matvei Stefarov; 2016 Niclas Olofsson</copyright>
     <tags>MiNET fnbt nbt MCPE varint and string.</tags>
   </metadata>
 </package>
