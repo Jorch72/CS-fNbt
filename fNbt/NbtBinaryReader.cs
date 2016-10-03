@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace fNbt {
     /// <summary> BinaryReader wrapper that takes care of reading primitives from an NBT stream,
     /// while taking care of endianness, string encoding, and skipping. </summary>
-    internal sealed class NbtBinaryReader : BinaryReader {
+    public sealed class NbtBinaryReader : BinaryReader {
         readonly byte[] buffer = new byte[sizeof(double)];
 
         byte[] seekBuffer;
@@ -44,21 +44,16 @@ namespace fNbt {
 
 
         public override int ReadInt32() {
-            if (swapNeeded) {
-                return Swap(base.ReadInt32());
+            if (UseVarInt) {
+                return ReadVarInt();
             } else {
-                return base.ReadInt32();
+                if (swapNeeded) {
+                    return Swap(base.ReadInt32());
+                } else {
+                    return base.ReadInt32();
+                }
             }
         }
-
-		public int ReadNbtInt()
-		{
-			if (UseVarInt) {
-				return ReadVarInt();
-			} else {
-				return ReadInt32();
-			}
-		}
 
 		public int ReadVarInt()
 		{

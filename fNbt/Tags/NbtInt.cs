@@ -54,13 +54,13 @@ namespace fNbt {
                 SkipTag(readStream);
                 return false;
             }
-            Value = readStream.ReadNbtInt();
+            Value = readStream.ReadInt32();
             return true;
         }
 
 
         internal override void SkipTag(NbtBinaryReader readStream) {
-            readStream.ReadNbtInt();
+            readStream.ReadInt32();
         }
 
 

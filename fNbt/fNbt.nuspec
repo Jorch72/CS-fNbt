@@ -8,6 +8,7 @@
     <owners>gurun</owners>
     <licenseUrl>https://github.com/NiclasOlofsson/fNbt/blob/master/docs/LICENSE</licenseUrl>
     <projectUrl>https://github.com/NiclasOlofsson/fNbt</projectUrl>
+    <iconUrl><![CDATA[https://secure.gravatar.com/avatar/2ba5d72bdad85108d14512c4d27ea550?s=128&r=g&d=retro]]></iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>MiNET fnbt version with support for MCPE 0.16+ varint and string.</description>
     <releaseNotes>MiNET fnbt version with support for MCPE 0.16+ varint and string.</releaseNotes>

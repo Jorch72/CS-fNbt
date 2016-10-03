@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace fNbt {
     /// <summary> BinaryWriter wrapper that writes NBT primitives to a stream,
     /// while taking care of endianness and string encoding, and counting bytes written. </summary>
-    internal sealed unsafe class NbtBinaryWriter {
+    public sealed unsafe class NbtBinaryWriter {
         // Write at most 512 MiB at a time.
         // This works around an overflow in BufferedStream.Write(byte[]) that happens on 1 GiB+ writes.
         public const int MaxWriteChunk = 512*1024*1024;
@@ -229,7 +229,6 @@ namespace fNbt {
                 }
             }
         }
-
 
         public void Write(byte[] data, int offset, int count) {
             int written = 0;
