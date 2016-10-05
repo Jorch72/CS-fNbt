@@ -68,12 +68,12 @@ namespace fNbt {
             writeStream.Write(NbtTagType.Int);
             if (Name == null) throw new NbtFormatException("Name is null");
             writeStream.Write(Name);
-            writeStream.WriteNbtInt(Value);
+            writeStream.Write(Value);
         }
 
 
         internal override void WriteData(NbtBinaryWriter writeStream) {
-            writeStream.WriteNbtInt(Value);
+            writeStream.Write(Value);
         }
 
 

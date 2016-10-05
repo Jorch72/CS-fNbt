@@ -73,29 +73,24 @@ namespace fNbt {
         }
 
 
-        public void Write(int value) {
-            unchecked {
-                if (swapNeeded) {
-                    buffer[0] = (byte)(value >> 24);
-                    buffer[1] = (byte)(value >> 16);
-                    buffer[2] = (byte)(value >> 8);
-                    buffer[3] = (byte)value;
-                } else {
-                    buffer[0] = (byte)value;
-                    buffer[1] = (byte)(value >> 8);
-                    buffer[2] = (byte)(value >> 16);
-                    buffer[3] = (byte)(value >> 24);
-                }
-            }
-            stream.Write(buffer, 0, 4);
-        }
-
-
-	    public void WriteNbtInt(int value) {
+	    public void Write(int value) {
 		    if (UseVarInt) {
 			    WriteVarInt(value);
 		    } else {
-			    Write(value);
+			    unchecked {
+				    if (swapNeeded) {
+					    buffer[0] = (byte)(value >> 24);
+					    buffer[1] = (byte)(value >> 16);
+					    buffer[2] = (byte)(value >> 8);
+					    buffer[3] = (byte)value;
+				    } else {
+					    buffer[0] = (byte)value;
+					    buffer[1] = (byte)(value >> 8);
+					    buffer[2] = (byte)(value >> 16);
+					    buffer[3] = (byte)(value >> 24);
+				    }
+			    }
+			    stream.Write(buffer, 0, 4);
 		    }
 	    }
 
