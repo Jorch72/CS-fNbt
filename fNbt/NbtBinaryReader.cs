@@ -60,16 +60,25 @@ namespace fNbt {
 			return VarInt.ReadSInt32(BaseStream);
 		}
 
-		public override long ReadInt64() {
-            if (swapNeeded) {
-                return Swap(base.ReadInt64());
-            } else {
-                return base.ReadInt64();
-            }
-        }
 
+	    public override long ReadInt64() {
+		    if (UseVarInt) {
+			    return ReadVarLong();
+		    } else {
+			    if (swapNeeded) {
+				    return Swap(base.ReadInt64());
+			    } else {
+				    return base.ReadInt64();
+			    }
+		    }
+	    }
 
-        public override float ReadSingle() {
+	    public long ReadVarLong()
+	    {
+		    return VarInt.ReadSInt64(BaseStream);
+	    }
+
+		public override float ReadSingle() {
             if (swapNeeded) {
                 FillBuffer(sizeof(float));
                 Array.Reverse(buffer, 0, sizeof(float));
@@ -89,11 +98,14 @@ namespace fNbt {
             return base.ReadDouble();
         }
 
+	    public int ReadLenght() {
+		    return (int)VarInt.ReadUInt32(BaseStream);
+	    }
 
-        public override string ReadString() {
-            short length;
+		public override string ReadString() {
+            int length;
 	        if (UseVarInt) {
-				length = ReadByte();
+				length = ReadLenght();
 			}
 			else {
 				length = ReadInt16();

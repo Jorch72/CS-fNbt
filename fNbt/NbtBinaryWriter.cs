@@ -111,33 +111,41 @@ namespace fNbt {
 						  (SwapInt16((short)(v >> 0x10)) & 0xffff));
 		}
 
-		public void Write(long value) {
-            unchecked {
-                if (swapNeeded) {
-                    buffer[0] = (byte)(value >> 56);
-                    buffer[1] = (byte)(value >> 48);
-                    buffer[2] = (byte)(value >> 40);
-                    buffer[3] = (byte)(value >> 32);
-                    buffer[4] = (byte)(value >> 24);
-                    buffer[5] = (byte)(value >> 16);
-                    buffer[6] = (byte)(value >> 8);
-                    buffer[7] = (byte)value;
-                } else {
-                    buffer[0] = (byte)value;
-                    buffer[1] = (byte)(value >> 8);
-                    buffer[2] = (byte)(value >> 16);
-                    buffer[3] = (byte)(value >> 24);
-                    buffer[4] = (byte)(value >> 32);
-                    buffer[5] = (byte)(value >> 40);
-                    buffer[6] = (byte)(value >> 48);
-                    buffer[7] = (byte)(value >> 56);
-                }
-            }
-            stream.Write(buffer, 0, 8);
-        }
 
+	    public void Write(long value) {
+		    if (UseVarInt) {
+			    WriteVarLong(value);
+		    } else {
+			    unchecked {
+				    if (swapNeeded) {
+					    buffer[0] = (byte)(value >> 56);
+					    buffer[1] = (byte)(value >> 48);
+					    buffer[2] = (byte)(value >> 40);
+					    buffer[3] = (byte)(value >> 32);
+					    buffer[4] = (byte)(value >> 24);
+					    buffer[5] = (byte)(value >> 16);
+					    buffer[6] = (byte)(value >> 8);
+					    buffer[7] = (byte)value;
+				    } else {
+					    buffer[0] = (byte)value;
+					    buffer[1] = (byte)(value >> 8);
+					    buffer[2] = (byte)(value >> 16);
+					    buffer[3] = (byte)(value >> 24);
+					    buffer[4] = (byte)(value >> 32);
+					    buffer[5] = (byte)(value >> 40);
+					    buffer[6] = (byte)(value >> 48);
+					    buffer[7] = (byte)(value >> 56);
+				    }
+			    }
+			    stream.Write(buffer, 0, 8);
+		    }
+	    }
 
-        public void Write(float value) {
+	    public void WriteVarLong(long value) {
+		    VarInt.WriteSInt64(BaseStream, value);
+	    }
+
+		public void Write(float value) {
             ulong tmpValue = *(uint*)&value;
             unchecked {
                 if (swapNeeded) {
@@ -183,8 +191,12 @@ namespace fNbt {
         }
 
 
-        // Based on BinaryWriter.Write(String)
-        public void Write([NotNull] string value) {
+	    public void WriteLength(int value) {
+		    VarInt.WriteUInt32(BaseStream, (uint)value);
+	    }
+
+		// Based on BinaryWriter.Write(String)
+		public void Write([NotNull] string value) {
             if (value == null) {
                 throw new ArgumentNullException("value");
             }
@@ -192,7 +204,7 @@ namespace fNbt {
             // Write out string length (as number of bytes)
             int numBytes = Encoding.GetByteCount(value);
 	        if (UseVarInt) {
-				Write((byte)numBytes);
+		        WriteLength(numBytes);
 			}
 			else {
 				Write((short)numBytes);
