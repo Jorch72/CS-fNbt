@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using fNbt.Tags;
 using JetBrains.Annotations;
 
 namespace fNbt {
@@ -291,6 +292,10 @@ namespace fNbt {
                         newTag = new NbtIntArray();
                         break;
 
+					case NbtTagType.LongArray:
+						newTag = new NbtLongArray();
+						break;
+
                     default:
                         throw new NbtFormatException("Unsupported tag type found in NBT_Compound: " + nextTag);
                 }
@@ -357,6 +362,10 @@ namespace fNbt {
                     case NbtTagType.IntArray:
                         newTag = new NbtIntArray();
                         break;
+
+					case NbtTagType.LongArray:
+						newTag = new NbtLongArray();
+						break;
 
                     default:
                         throw new NbtFormatException("Unsupported tag type found in NBT_Compound: " + nextTag);

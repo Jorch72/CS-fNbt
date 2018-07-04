@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text;
+using fNbt.Tags;
 using JetBrains.Annotations;
 
 namespace fNbt {
@@ -251,9 +252,24 @@ namespace fNbt {
                     throw new InvalidCastException("Cannot get IntArrayValue from " + GetCanonicalTagName(TagType));
                 }
             }
-        }
+		}
 
-        /// <summary> Returns the value of this tag, cast as a string.
+	    /// <summary> Returns the value of this tag, cast as an long array.
+		/// Only supported by NbtLongArray tags. </summary>
+		/// <exception cref="InvalidCastException"> When used on a tag other than NbtLongArray. </exception>
+	    public long[] LongArrayValue
+	    {
+		    get
+		    {
+			    if (TagType == NbtTagType.LongArray) {
+				    return ((NbtLongArray)this).Value;
+			    } else {
+				    throw new InvalidCastException("Cannot get LongArrayValue from " + GetCanonicalTagName(TagType));
+			    }
+		    }
+	    }
+
+	    /// <summary> Returns the value of this tag, cast as a string.
         /// Returns exact value for NbtString, and stringified (using InvariantCulture) value for NbtByte, NbtDouble, NbtFloat, NbtInt, NbtLong, and NbtShort.
         /// Not supported by NbtCompound, NbtList, NbtByteArray, or NbtIntArray. </summary>
         /// <exception cref="InvalidCastException"> When used on an unsupported tag. </exception>
@@ -307,6 +323,8 @@ namespace fNbt {
                     return "TAG_Int";
                 case NbtTagType.IntArray:
                     return "TAG_Int_Array";
+				case NbtTagType.LongArray:
+					return "TAG_Long_Array";
                 case NbtTagType.List:
                     return "TAG_List";
                 case NbtTagType.Long:
